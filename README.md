@@ -1,8 +1,9 @@
 # Building an NFC Tag-Reader App
 
 Read NFC tags in your app.
-![](![IMG_8990](https://github.com/akshayPhulareNitor/NFCTagReader/assets/127845792/fbe7e1a4-0ea9-4914-ae3b-0c1828030a97)
-)
+![IMG_8990](https://github.com/akshayPhulareNitor/NFCTagReader/assets/127845792/a16ca8d1-6203-46ee-aa0d-4ebd1c2e38ee)
+![IMG_8991](https://github.com/akshayPhulareNitor/NFCTagReader/assets/127845792/ac8a3b29-1cda-454d-b50e-ab608cdf5abf)
+
 
 ## Overview
 
