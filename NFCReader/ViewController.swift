@@ -10,6 +10,8 @@ import CoreNFC
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var lblTag: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -19,52 +21,38 @@ class ViewController: UIViewController {
     @IBAction func onScanClick(_ sender: Any) {
         
         // 1
-        let session = NFCNDEFReaderSession(
-            delegate: self,
-            queue: nil,
-            invalidateAfterFirstRead: true
-        )
+        let session = NFCTagReaderSession(pollingOption: .iso14443, delegate: self)
 
         // 2
-        session.alertMessage = "Hold your device near a tag to scan it."
+        session!.alertMessage = "Hold your device near a tag to scan it."
 
         // 3
-        session.begin()
+        session!.begin()
     }
 }
 
 
 
-extension ViewController: NFCNDEFReaderSessionDelegate {
-    
-    // 1
-    func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
-        print("Started scanning for tags")
-    }
+extension ViewController: NFCTagReaderSessionDelegate {
 
-    // 2
-    func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
-        
-        print("Detected tags with \(messages.count) messages")
-        
-        for messageIndex in 0 ..< messages.count {
-            
-            let message = messages[messageIndex]
-            print("\tMessage \(messageIndex) with length \(message.length)")
-            
-            for recordIndex in 0 ..< message.records.count {
-                
-                let record = message.records[recordIndex]
-                print("\t\tRecord \(recordIndex)")
-                print("\t\t\tidentifier: \(String(data: record.identifier, encoding: .utf8))")
-                print("\t\t\ttype: \(String(data: record.type, encoding: .utf8))")
-                print("\t\t\tpayload: \(String(data: record.payload, encoding: .utf8))")
-            }
-        }
+    func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
+        print("tagReaderSessionDidBecomeActive")
     }
     
-    // 3
-    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
-        print("Session did invalidate with error: \(error)")
+    func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
+        print("Detected tags with \(tags.count) messages")
+
+        print(tags[0])
+        
+        DispatchQueue.main.async {
+            self.lblTag.text = "\(tags[0])"
+        }
+        session.alertMessage = "\(tags[0])"
+        session.invalidate()
+
+    }
+    
+    func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
+        print("\(error)")
     }
 }
